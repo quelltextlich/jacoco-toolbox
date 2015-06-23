@@ -14,6 +14,9 @@
 
     <modules>
         <module>toolbox</module>
+        <module>test-data-foo</module>
+        <module>test-data-bar</module>
+        <module>test-data-merged</module>
     </modules>
 
     <properties>
@@ -22,6 +25,9 @@
 
         <plugin.shade.version>2.0</plugin.shade.version>
         <plugin.compiler.version>3.2</plugin.compiler.version>
+        <plugin.surefire.version>2.12.3</plugin.surefire.version>
+
+        <jacoco.version>0.7.5.201505241946</jacoco.version>
     </properties>
 
     <licenses>
