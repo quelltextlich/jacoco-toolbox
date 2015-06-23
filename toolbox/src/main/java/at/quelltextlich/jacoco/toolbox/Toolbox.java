@@ -6,8 +6,13 @@
 //
 package at.quelltextlich.jacoco.toolbox;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.util.LinkedList;
+import java.util.List;
 
+import org.jacoco.core.tools.ExecFileLoader;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -19,9 +24,26 @@ import org.kohsuke.args4j.OptionHandlerFilter;
 public class Toolbox {
 
   protected PrintStream stderr = System.err;
+  private ExecFileLoader loader = new ExecFileLoader();
 
   @Option(name = "--help", aliases = { "-help", "-h", "-?" }, help = true, usage = "print this help screen")
   private boolean help;
+
+  private List<File> inputs = new LinkedList<File>();
+
+  @Option(name = "--input", usage = "Adds an input to the toolbox")
+  void addInput(final String inputStr) {
+    File input = new File(inputStr);
+    if (!input.exists()) {
+      exit("The file '" + input + "' does not exist");
+    }
+    if (!input.canRead()) {
+      exit("The file '" + input + "' is not readable");
+    }
+    if (!inputs.add(input)) {
+      exit("Could not add '" + input + "' to inputs");
+    }
+  }
 
   /**
    * Parses the toolbox' arguments
@@ -35,7 +57,7 @@ public class Toolbox {
       parser.parseArgument(args);
     } catch (CmdLineException e) {
       parser.printUsage(stderr);
-      exitWithException("Failed to parse args", e);
+      exit("Failed to parse args", e);
     }
 
     if (help) {
@@ -58,19 +80,46 @@ public class Toolbox {
   }
 
   /**
-   * Exits the toolbox with an exception
+   * Exits the toolbox with a reason
    *
    * @param reason
    *          Reason for exit (may be null).
    * @param e
    *          Exception to exit with.
    */
-  private void exitWithException(String reason, Exception e) {
+  private void exit(String reason) {
+    exit(reason, null);
+  }
+
+  /**
+   * Exits the toolbox with a reason and exception
+   *
+   * @param reason
+   *          Reason for exit (may be null).
+   * @param e
+   *          Exception to exit with.
+   */
+  private void exit(String reason, Exception e) {
     if (reason != null) {
       stderr.println(reason);
     }
-    e.printStackTrace(stderr);
+    if (e != null) {
+      e.printStackTrace(stderr);
+    }
     exit(1);
+  }
+
+  /**
+   * Loads the JaCoCo inputs
+   */
+  public void loadInputs() {
+    for (File input : inputs) {
+      try {
+        loader.load(input);
+      } catch (IOException e) {
+        exit("Error loading '" + input + "'", e);
+      }
+    }
   }
 
   /**
@@ -81,6 +130,8 @@ public class Toolbox {
    */
   public void run(String[] args) {
     parseArgs(args);
+
+    loadInputs();
 
     exit(0);
   }

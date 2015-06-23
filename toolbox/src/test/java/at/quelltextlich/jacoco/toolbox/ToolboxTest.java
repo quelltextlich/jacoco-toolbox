@@ -7,11 +7,26 @@
 package at.quelltextlich.jacoco.toolbox;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 
 import junit.framework.TestCase;
 
 public class ToolboxTest extends TestCase {
+  private File getTemporaryFile() throws IOException {
+    return getTemporaryFile(true);
+  }
+
+  private File getTemporaryFile(boolean create) throws IOException {
+    File file = File.createTempFile("jacoco-toolbox-test", ".exec");
+    file.deleteOnExit();
+    if (!create) {
+      assertTrue("Could not delete temporary file '" + file + "'",
+          file.delete());
+    }
+    return file;
+  }
 
   public void testUnknownArgument() {
     String[] args = new String[] { "--foo" };
@@ -23,13 +38,91 @@ public class ToolboxTest extends TestCase {
     toolbox.assertExitStatus(1);
   }
 
-  public void testHelpArgument() {
+  public void testHelp() {
     String[] args = new String[] { "--help" };
 
     ToolboxShim toolbox = new ToolboxShim();
     toolbox.run(args);
 
     toolbox.assertStderrContains("--help");
+    toolbox.assertExitStatus(0);
+  }
+
+  public void testInputNonExisting() {
+    String[] args = new String[] { "--input", "foo.exec" };
+
+    ToolboxShim toolbox = new ToolboxShim();
+    toolbox.run(args);
+
+    toolbox.assertStderrContains("not exist");
+    toolbox.assertExitStatus(1);
+  }
+
+  public void testInputNonReadable() throws IOException {
+    File file = getTemporaryFile();
+    file.setReadable(false);
+
+    String[] args = new String[] { "--input", file.getAbsolutePath() };
+
+    ToolboxShim toolbox = new ToolboxShim();
+    toolbox.run(args);
+
+    toolbox.assertStderrContains("not readable");
+    toolbox.assertExitStatus(1);
+  }
+
+  public void testInputSingle() throws IOException {
+    File file = getTemporaryFile();
+
+    String[] args = new String[] { "--input", file.getAbsolutePath() };
+
+    ToolboxShim toolbox = new ToolboxShim();
+    toolbox.run(args);
+
+    toolbox.assertExitStatus(0);
+  }
+
+  public void testInputMultiple() throws IOException {
+    File fileFoo = getTemporaryFile();
+    File fileBar = getTemporaryFile();
+
+    String[] args = new String[] { "--input", fileFoo.getAbsolutePath(),
+        "--input", fileBar.getAbsolutePath() };
+
+    ToolboxShim toolbox = new ToolboxShim();
+    toolbox.run(args);
+
+    toolbox.assertExitStatus(0);
+  }
+
+  public void testInputMerged() throws IOException {
+    File file = new File(
+        getClass().getResource("/jacoco-merged.exec").getPath());
+    String[] args = new String[] { "--input", file.getAbsolutePath() };
+
+    ToolboxShim toolbox = new ToolboxShim();
+    toolbox.run(args);
+
+    toolbox.assertExitStatus(0);
+  }
+
+  public void testInputFoo() throws IOException {
+    File file = new File(getClass().getResource("/jacoco-foo.exec").getPath());
+    String[] args = new String[] { "--input", file.getAbsolutePath() };
+
+    ToolboxShim toolbox = new ToolboxShim();
+    toolbox.run(args);
+
+    toolbox.assertExitStatus(0);
+  }
+
+  public void testInputBar() throws IOException {
+    File file = new File(getClass().getResource("/jacoco-bar.exec").getPath());
+    String[] args = new String[] { "--input", file.getAbsolutePath() };
+
+    ToolboxShim toolbox = new ToolboxShim();
+    toolbox.run(args);
+
     toolbox.assertExitStatus(0);
   }
 
