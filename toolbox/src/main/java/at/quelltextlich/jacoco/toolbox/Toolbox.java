@@ -7,12 +7,22 @@
 package at.quelltextlich.jacoco.toolbox;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.jacoco.core.analysis.Analyzer;
+import org.jacoco.core.analysis.CoverageBuilder;
+import org.jacoco.core.analysis.IBundleCoverage;
 import org.jacoco.core.tools.ExecFileLoader;
+import org.jacoco.report.IReportVisitor;
+import org.jacoco.report.ISourceFileLocator;
+import org.jacoco.report.MultiSourceFileLocator;
+import org.jacoco.report.csv.CSVFormatter;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -44,6 +54,32 @@ public class Toolbox {
       exit("Could not add '" + input + "' to inputs");
     }
   }
+
+  private List<File> analyzeFors = new LinkedList<File>();
+
+  @Option(name = "--analyze-for", usage = "Add a file to analyze for. This can be a plain class file, a jar file, or a directory.")
+  void addAnalyze(final String analyzeFor) {
+    File file = new File(analyzeFor);
+    if (!file.exists()) {
+      exit("The file '" + file + "' does not exist");
+    }
+    if (!analyzeFors.add(file)) {
+      exit("Could not add '" + file + "' to analyzes");
+    }
+  }
+
+  private List<File> outputsCsv = new LinkedList<File>();
+
+  @Option(name = "--output-csv", usage = "Adds an output in CSV format.")
+  void addOutputCsv(final String outputStr) {
+    File output = new File(outputStr);
+    if (!outputsCsv.add(output)) {
+      exit("Could not add '" + output + "' to CSV outputs");
+    }
+  }
+
+  private ISourceFileLocator locator = new MultiSourceFileLocator(2);
+  private IBundleCoverage bundle;
 
   /**
    * Parses the toolbox' arguments
@@ -123,6 +159,63 @@ public class Toolbox {
   }
 
   /**
+   * Builds a bundle for all loaded inputs
+   */
+  private void buildBundle() {
+    CoverageBuilder builder = new CoverageBuilder();
+    Analyzer analyzer = new Analyzer(loader.getExecutionDataStore(), builder);
+    for (File file : analyzeFors) {
+      try {
+        analyzer.analyzeAll(file);
+      } catch (IOException e) {
+        exit("Could not analyze for '" + file + "'", e);
+      }
+    }
+    bundle = builder.getBundle("bundle");
+  }
+
+  /**
+   * Lets a visitor visit the bundle
+   *
+   * @param visitor
+   *          Visitor to visit the bundle
+   * @throws IOException
+   */
+  private void visit(IReportVisitor visitor) throws IOException {
+    visitor.visitInfo(loader.getSessionInfoStore().getInfos(), loader
+        .getExecutionDataStore().getContents());
+    visitor.visitBundle(bundle, locator);
+    visitor.visitEnd();
+  }
+
+  /**
+   * Outputs the CSV files
+   */
+  public void outputCsvs() {
+    CSVFormatter formatter = new CSVFormatter();
+    for (File file : outputsCsv) {
+      OutputStream stream;
+      try {
+        stream = new FileOutputStream(file);
+        try {
+          IReportVisitor visitor = formatter.createVisitor(stream);
+          visit(visitor);
+        } catch (IOException e) {
+          exit("Failed to write CSV to '" + file + "'");
+        } finally {
+          try {
+            stream.close();
+          } catch (IOException e) {
+            exit("Cannot close file '" + file + "'", e);
+          }
+        }
+      } catch (FileNotFoundException e) {
+        exit("Cannot write to '" + file + "'", e);
+      }
+    }
+  }
+
+  /**
    * Runs the toolbox' logic for given parameters
    *
    * @param args
@@ -132,6 +225,10 @@ public class Toolbox {
     parseArgs(args);
 
     loadInputs();
+
+    buildBundle();
+
+    outputCsvs();
 
     exit(0);
   }
