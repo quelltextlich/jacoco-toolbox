@@ -311,6 +311,32 @@ public class ToolboxTest extends TestCase {
         outputCsv);
   }
 
+  public void testOutputHtmlInputFooNoSource() throws IOException {
+    File input = new File(getClass().getResource("/jacoco-foo.exec").getPath());
+    File inputJar = new File(getClass().getResource("/TestDataGroupFoo.jar")
+        .getPath());
+    File output = getTemporaryFile(false, "dir");
+    String[] args = new String[] { "--input", input.getAbsolutePath(),
+        "--analyze-for", inputJar.getAbsolutePath(), "--output-html",
+        output.getAbsolutePath() };
+
+    ToolboxShim toolbox = new ToolboxShim();
+    toolbox.run(args);
+
+    toolbox.assertExitStatus(0);
+
+    List<String> indexLines = Files.readAllLines(
+        new File(output, "index.html").toPath(), Charset.defaultCharset());
+    assertTrue("Generated index file does not contain any lines",
+        indexLines.size() > 0);
+    assertTrue("Generated index file does not cointan "
+        + "'at.quelltextlich.jacoco.toolbox' marker", indexLines.get(0)
+        .contains("at.quelltextlich.jacoco.toolbox"));
+
+    File foo = new File(output, "at.quelltextlich.jacoco.toolbox/Foo.html");
+    assertTrue("No 'Foo' HTML file got generated", foo.exists());
+  }
+
   public void testOutputXmlInputFooBar() throws IOException {
     File inputFoo = new File(getClass().getResource("/jacoco-foo.exec")
         .getPath());

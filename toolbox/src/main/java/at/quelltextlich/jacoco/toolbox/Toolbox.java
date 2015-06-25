@@ -19,10 +19,12 @@ import org.jacoco.core.analysis.Analyzer;
 import org.jacoco.core.analysis.CoverageBuilder;
 import org.jacoco.core.analysis.IBundleCoverage;
 import org.jacoco.core.tools.ExecFileLoader;
+import org.jacoco.report.FileMultiReportOutput;
 import org.jacoco.report.IReportVisitor;
 import org.jacoco.report.ISourceFileLocator;
 import org.jacoco.report.MultiSourceFileLocator;
 import org.jacoco.report.csv.CSVFormatter;
+import org.jacoco.report.html.HTMLFormatter;
 import org.jacoco.report.xml.XMLFormatter;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -86,6 +88,16 @@ public class Toolbox {
     File output = new File(outputStr);
     if (!outputsExec.add(output)) {
       exit("Could not add '" + output + "' to exec outputs");
+    }
+  }
+
+  private List<File> outputsHtml = new LinkedList<File>();
+
+  @Option(name = "--output-html", usage = "Adds an output in HTML format.")
+  void addOutputHtml(final String outputStr) {
+    File output = new File(outputStr);
+    if (!outputsHtml.add(output)) {
+      exit("Could not add '" + output + "' to HTML outputs");
     }
   }
 
@@ -250,6 +262,23 @@ public class Toolbox {
   }
 
   /**
+   * Outputs the HTML files
+   */
+  public void outputHtmls() {
+    HTMLFormatter formatter = new HTMLFormatter();
+    for (File file : outputsHtml) {
+      FileMultiReportOutput output;
+      output = new FileMultiReportOutput(file);
+      try {
+        IReportVisitor visitor = formatter.createVisitor(output);
+        visit(visitor);
+      } catch (IOException e) {
+        exit("Failed to write HTML to '" + file + "'");
+      }
+    }
+  }
+
+  /**
    * Outputs the XML files
    */
   public void outputXmls() {
@@ -292,6 +321,7 @@ public class Toolbox {
     buildBundle();
 
     outputCsvs();
+    outputHtmls();
     outputXmls();
 
     exit(0);
