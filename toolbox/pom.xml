@@ -50,6 +50,18 @@
     <build>
         <plugins>
             <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-jar-plugin</artifactId>
+	        <version>${plugin.jar.version}</version>
+	        <configuration>
+	            <archive>
+	                <manifest>
+		            <mainClass>at.quelltextlich.jacoco.toolbox.Toolbox</mainClass>
+	                </manifest>
+	            </archive>
+	        </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>${plugin.shade.version}</version>
