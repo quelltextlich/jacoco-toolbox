@@ -23,6 +23,7 @@ import org.jacoco.report.IReportVisitor;
 import org.jacoco.report.ISourceFileLocator;
 import org.jacoco.report.MultiSourceFileLocator;
 import org.jacoco.report.csv.CSVFormatter;
+import org.jacoco.report.xml.XMLFormatter;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -75,6 +76,16 @@ public class Toolbox {
     File output = new File(outputStr);
     if (!outputsCsv.add(output)) {
       exit("Could not add '" + output + "' to CSV outputs");
+    }
+  }
+
+  private List<File> outputsXml = new LinkedList<File>();
+
+  @Option(name = "--output-xml", usage = "Adds an output in XML format.")
+  void addOutputXml(final String outputStr) {
+    File output = new File(outputStr);
+    if (!outputsXml.add(output)) {
+      exit("Could not add '" + output + "' to XML outputs");
     }
   }
 
@@ -216,6 +227,33 @@ public class Toolbox {
   }
 
   /**
+   * Outputs the XML files
+   */
+  public void outputXmls() {
+    XMLFormatter formatter = new XMLFormatter();
+    for (File file : outputsXml) {
+      OutputStream stream;
+      try {
+        stream = new FileOutputStream(file);
+        try {
+          IReportVisitor visitor = formatter.createVisitor(stream);
+          visit(visitor);
+        } catch (IOException e) {
+          exit("Failed to write XML to '" + file + "'");
+        } finally {
+          try {
+            stream.close();
+          } catch (IOException e) {
+            exit("Cannot close file '" + file + "'", e);
+          }
+        }
+      } catch (FileNotFoundException e) {
+        exit("Cannot write to '" + file + "'", e);
+      }
+    }
+  }
+
+  /**
    * Runs the toolbox' logic for given parameters
    *
    * @param args
@@ -229,6 +267,7 @@ public class Toolbox {
     buildBundle();
 
     outputCsvs();
+    outputXmls();
 
     exit(0);
   }
