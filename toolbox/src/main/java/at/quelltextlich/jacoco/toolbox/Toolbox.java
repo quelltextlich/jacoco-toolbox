@@ -79,6 +79,16 @@ public class Toolbox {
     }
   }
 
+  private List<File> outputsExec = new LinkedList<File>();
+
+  @Option(name = "--output-exec", usage = "Adds an output in Jacoco's exec format.")
+  void addOutputExec(final String outputStr) {
+    File output = new File(outputStr);
+    if (!outputsExec.add(output)) {
+      exit("Could not add '" + output + "' to exec outputs");
+    }
+  }
+
   private List<File> outputsXml = new LinkedList<File>();
 
   @Option(name = "--output-xml", usage = "Adds an output in XML format.")
@@ -227,6 +237,19 @@ public class Toolbox {
   }
 
   /**
+   * Outputs the Exec files
+   */
+  public void outputExecs() {
+    for (File file : outputsExec) {
+      try {
+        loader.save(file, false);
+      } catch (IOException e) {
+        exit("Failed to write exec to '" + file + "'", e);
+      }
+    }
+  }
+
+  /**
    * Outputs the XML files
    */
   public void outputXmls() {
@@ -263,6 +286,8 @@ public class Toolbox {
     parseArgs(args);
 
     loadInputs();
+
+    outputExecs();
 
     buildBundle();
 

@@ -275,6 +275,42 @@ public class ToolboxTest extends TestCase {
         output);
   }
 
+  public void testOutputExecInputFooBar() throws IOException {
+    File inputFoo = new File(getClass().getResource("/jacoco-foo.exec")
+        .getPath());
+    File inputBar = new File(getClass().getResource("/jacoco-bar.exec")
+        .getPath());
+    File outputExec = getTemporaryFile(false, "exec");
+    String[] argsExec = new String[] { "--input", inputFoo.getAbsolutePath(),
+        "--input", inputBar.getAbsolutePath(), "--output-exec",
+        outputExec.getAbsolutePath() };
+
+    ToolboxShim toolboxExec = new ToolboxShim();
+    toolboxExec.run(argsExec);
+    toolboxExec.assertExitStatus(0);
+
+    // Since execs need not agree byte for byte, we instead generate a CSV from
+    // the merged exec, and assert on this CSV.
+
+    File inputJar = new File(getClass().getResource("/TestDataGroupMerged.jar")
+        .getPath());
+    File outputCsv = getTemporaryFile(false, "exec");
+    String[] argsCsv = new String[] { "--input", outputExec.getAbsolutePath(),
+        "--analyze-for", inputJar.getAbsolutePath(), "--output-csv",
+        outputCsv.getAbsolutePath() };
+
+    ToolboxShim toolboxCsv = new ToolboxShim();
+    toolboxCsv.run(argsCsv);
+    toolboxCsv.assertExitStatus(0);
+
+    assertFileEquals("Generated output csv file did not match expected",
+        new String[] { CSV_HEADER,
+            "bundle,at.quelltextlich.jacoco.toolbox,Bar,1,8,0,0,1,4,1,3,1,3",
+            "bundle,at.quelltextlich.jacoco.toolbox,Baz,4,0,0,0,2,0,2,0,2,0",
+            "bundle,at.quelltextlich.jacoco.toolbox,Foo,1,8,0,0,1,4,1,3,1,3" },
+        outputCsv);
+  }
+
   public void testOutputXmlInputFooBar() throws IOException {
     File inputFoo = new File(getClass().getResource("/jacoco-foo.exec")
         .getPath());
