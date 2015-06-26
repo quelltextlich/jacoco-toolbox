@@ -19,9 +19,9 @@ import org.jacoco.core.analysis.Analyzer;
 import org.jacoco.core.analysis.CoverageBuilder;
 import org.jacoco.core.analysis.IBundleCoverage;
 import org.jacoco.core.tools.ExecFileLoader;
+import org.jacoco.report.DirectorySourceFileLocator;
 import org.jacoco.report.FileMultiReportOutput;
 import org.jacoco.report.IReportVisitor;
-import org.jacoco.report.ISourceFileLocator;
 import org.jacoco.report.MultiSourceFileLocator;
 import org.jacoco.report.csv.CSVFormatter;
 import org.jacoco.report.html.HTMLFormatter;
@@ -35,6 +35,7 @@ import org.kohsuke.args4j.OptionHandlerFilter;
  * Toolbox for working with Jacoco exec files
  */
 public class Toolbox {
+  final private static int TAB_WIDTH = 2;
 
   protected PrintStream stderr = System.err;
   private ExecFileLoader loader = new ExecFileLoader();
@@ -68,6 +69,22 @@ public class Toolbox {
     }
     if (!analyzeFors.add(file)) {
       exit("Could not add '" + file + "' to analyzes");
+    }
+  }
+
+  private List<File> sources = new LinkedList<File>();
+
+  @Option(name = "--source", usage = "Add a directory to search sources in.")
+  void addSource(final String source) {
+    File file = new File(source);
+    if (!file.exists()) {
+      exit("The file '" + file + "' does not exist");
+    }
+    if (!file.isDirectory()) {
+      exit("The file '" + file + "' is not a directory");
+    }
+    if (!sources.add(file)) {
+      exit("Could not add '" + file + "' to sources");
     }
   }
 
@@ -111,7 +128,7 @@ public class Toolbox {
     }
   }
 
-  private ISourceFileLocator locator = new MultiSourceFileLocator(2);
+  private MultiSourceFileLocator locator = new MultiSourceFileLocator(TAB_WIDTH);
   private IBundleCoverage bundle;
 
   /**
@@ -205,6 +222,15 @@ public class Toolbox {
       }
     }
     bundle = builder.getBundle("bundle");
+  }
+
+  /**
+   * Configure the locator to find source files
+   */
+  private void configureLocator() {
+    for (File file : sources) {
+      locator.add(new DirectorySourceFileLocator(file, "utf-8", TAB_WIDTH));
+    }
   }
 
   /**
@@ -319,6 +345,7 @@ public class Toolbox {
     outputExecs();
 
     buildBundle();
+    configureLocator();
 
     outputCsvs();
     outputHtmls();
