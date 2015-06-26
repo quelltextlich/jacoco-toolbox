@@ -206,6 +206,29 @@ public class ToolboxTest extends TestCase {
         output);
   }
 
+  public void testOutputCsvInputMergedWithTitle() throws IOException {
+    File input = new File(getClass().getResource("/jacoco-merged.exec")
+        .getPath());
+    File inputJar = new File(getClass().getResource("/TestDataGroupMerged.jar")
+        .getPath());
+    File output = getTemporaryFile(false, "csv");
+    String[] args = new String[] { "--input", input.getAbsolutePath(),
+        "--analyze-for", inputJar.getAbsolutePath(), "--output-csv",
+        output.getAbsolutePath(), "--title", "quux" };
+
+    ToolboxShim toolbox = new ToolboxShim();
+    toolbox.run(args);
+
+    toolbox.assertExitStatus(0);
+
+    assertFileEquals("Generated output csv file did not match expected",
+        new String[] { CSV_HEADER,
+            "quux,at.quelltextlich.jacoco.toolbox,Bar,1,8,0,0,1,4,1,3,1,3",
+            "quux,at.quelltextlich.jacoco.toolbox,Baz,4,0,0,0,2,0,2,0,2,0",
+            "quux,at.quelltextlich.jacoco.toolbox,Foo,1,8,0,0,1,4,1,3,1,3" },
+        output);
+  }
+
   public void testOutputCsvInputFoo() throws IOException {
     File input = new File(getClass().getResource("/jacoco-foo.exec").getPath());
     File inputJar = new File(getClass().getResource("/TestDataGroupFoo.jar")

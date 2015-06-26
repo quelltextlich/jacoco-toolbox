@@ -128,6 +128,9 @@ public class Toolbox {
     }
   }
 
+  @Option(name = "--title", usage = "Title used for reports")
+  private String title = "bundle";
+
   private MultiSourceFileLocator locator = new MultiSourceFileLocator(TAB_WIDTH);
   private IBundleCoverage bundle;
 
@@ -221,7 +224,7 @@ public class Toolbox {
         exit("Could not analyze for '" + file + "'", e);
       }
     }
-    bundle = builder.getBundle("bundle");
+    bundle = builder.getBundle(title);
   }
 
   /**
