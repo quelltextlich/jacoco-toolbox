@@ -9,8 +9,6 @@ SCRIPT_DIR_ABS="$PWD"
 
 TEST_RESOURCES_DIR_ABS="$SCRIPT_DIR_ABS/toolbox/src/test/resources"
 
-mvn clean package
-
 copy_for_aspect() {
     local ASPECT="$1"
     ASPECT_TARGET_DIR_ABS="$SCRIPT_DIR_ABS/test-data-$ASPECT/target"
@@ -20,5 +18,11 @@ copy_for_aspect() {
 
 for ASPECT in merged foo bar
 do
+    pushd "test-data-$ASPECT" >/dev/null
+
+    mvn clean package
+
     copy_for_aspect "$ASPECT"
+
+    popd >/dev/null
 done
