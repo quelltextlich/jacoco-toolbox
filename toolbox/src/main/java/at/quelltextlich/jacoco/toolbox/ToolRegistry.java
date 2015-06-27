@@ -58,6 +58,8 @@ public class ToolRegistry {
     registerTool("report-csv", "writes a CSV report", ReportCsvTool.class);
     registerTool("report-xml", "writes an XML report", ReportXmlTool.class);
     registerTool("report-html", "writes an HTML report", ReportHtmlTool.class);
+    registerTool("version", "dump toolbox version", VersionTool.class,
+        new String[] { "--version", "-version" });
   }
 
   public ToolRegistration getToolRegistration(final String command) {
