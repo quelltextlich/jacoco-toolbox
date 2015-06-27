@@ -52,7 +52,7 @@ public class ReportCsvToolTest extends ToolTestCase {
 
     tool.assertExitStatus(0);
 
-    assertFileEquals("Generated output CSV file did not match expected",
+    assertEquivalentCsv("Generated output CSV file did not match expected",
         new String[] { CSV_HEADER }, output);
   }
 
@@ -67,7 +67,7 @@ public class ReportCsvToolTest extends ToolTestCase {
 
     tool.assertExitStatus(0);
 
-    assertFileEquals("Generated output CSV file did not match expected",
+    assertEquivalentCsv("Generated output CSV file did not match expected",
         new String[] { CSV_HEADER }, output);
   }
 
@@ -83,7 +83,7 @@ public class ReportCsvToolTest extends ToolTestCase {
 
     tool.assertExitStatus(0);
 
-    assertFileEquals("Generated output CSV file did not match expected",
+    assertEquivalentCsv("Generated output CSV file did not match expected",
         new String[] { CSV_HEADER }, output);
   }
 
@@ -102,7 +102,7 @@ public class ReportCsvToolTest extends ToolTestCase {
 
     tool.assertExitStatus(0);
 
-    assertFileEquals("Generated output CSV file did not match expected",
+    assertEquivalentCsv("Generated output CSV file did not match expected",
         MERGED_CSV, output);
   }
 
@@ -121,7 +121,7 @@ public class ReportCsvToolTest extends ToolTestCase {
 
     tool.assertExitStatus(0);
 
-    assertFileEquals("Generated output CSV file did not match expected",
+    assertEquivalentCsv("Generated output CSV file did not match expected",
         new String[] { CSV_HEADER,
         "quux,at.quelltextlich.jacoco.toolbox,Bar,1,8,0,0,1,4,1,3,1,3",
         "quux,at.quelltextlich.jacoco.toolbox,Baz,4,0,0,0,2,0,2,0,2,0",
@@ -144,7 +144,7 @@ public class ReportCsvToolTest extends ToolTestCase {
 
     tool.assertExitStatus(0);
 
-    assertFileEquals("Generated output CSV file did not match expected",
+    assertEquivalentCsv("Generated output CSV file did not match expected",
         FOO_CSV, output);
   }
 
@@ -163,7 +163,7 @@ public class ReportCsvToolTest extends ToolTestCase {
 
     tool.assertExitStatus(0);
 
-    assertFileEquals(
+    assertEquivalentCsv(
         "Generated output CSV file did not match expected",
         new String[] {
             CSV_HEADER,
@@ -190,7 +190,7 @@ public class ReportCsvToolTest extends ToolTestCase {
 
     tool.assertExitStatus(0);
 
-    assertFileEquals("Generated output CSV file did not match expected",
+    assertEquivalentCsv("Generated output CSV file did not match expected",
         MERGED_CSV, output);
   }
 

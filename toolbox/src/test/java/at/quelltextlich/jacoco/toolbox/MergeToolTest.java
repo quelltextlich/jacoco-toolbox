@@ -106,7 +106,7 @@ public class MergeToolTest extends ToolTestCase {
 
     tool.assertExitStatus(0);
 
-    assertFileEquals("Generated file did not match expected as CSV", expected,
-        output);
+    assertEquivalentCsv("Generated file did not match expected as CSV",
+        expected, output);
   }
 }
