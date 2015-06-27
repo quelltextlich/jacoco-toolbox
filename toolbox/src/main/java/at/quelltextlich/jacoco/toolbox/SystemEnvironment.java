@@ -16,6 +16,11 @@ public class SystemEnvironment implements Environment {
   }
 
   @Override
+  public PrintStream getStdout() {
+    return System.out;
+  }
+
+  @Override
   public void exit(final int exitCode) {
     System.exit(exitCode);
   }

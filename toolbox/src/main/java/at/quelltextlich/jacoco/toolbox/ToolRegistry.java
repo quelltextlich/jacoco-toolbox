@@ -51,6 +51,8 @@ public class ToolRegistry {
     registerTool("help", helpDescription, HelpTool.class, new String[] {
       "--help", "-help", "-h", "-?" });
 
+    registerTool("identify", "shows format version of exec files",
+        IdentifyVersionTool.class);
     registerTool("merge", "merges multiple exec files into a single one",
         MergeTool.class);
     registerTool("report-csv", "writes a CSV report", ReportCsvTool.class);

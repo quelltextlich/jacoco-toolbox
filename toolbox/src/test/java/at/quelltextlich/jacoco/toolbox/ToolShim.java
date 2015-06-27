@@ -12,11 +12,15 @@ class ToolShim extends Tool implements Environment {
   private Integer exitStatus = null;
   private final PrintStream stderrEnv;
   private final ByteArrayOutputStream stderrStream;
+  private final PrintStream stdoutEnv;
+  private final ByteArrayOutputStream stdoutStream;
   private Tool tool;
 
   public <T extends Tool> ToolShim(final Class<T> toolClass) {
     stderrStream = new ByteArrayOutputStream();
     stderrEnv = new PrintStream(stderrStream);
+    stdoutStream = new ByteArrayOutputStream();
+    stdoutEnv = new PrintStream(stdoutStream);
     try {
       tool = toolClass.newInstance();
     } catch (final Exception e) {
@@ -29,6 +33,11 @@ class ToolShim extends Tool implements Environment {
   @Override
   public PrintStream getStderr() {
     return stderrEnv;
+  }
+
+  @Override
+  public PrintStream getStdout() {
+    return stdoutEnv;
   }
 
   @Override
@@ -64,6 +73,20 @@ class ToolShim extends Tool implements Environment {
     final String stderrStr = stderrStream.toString();
     TestCase.assertTrue("Stderr is '" + stderrStr + "', but should contain '"
         + str + "'", stderrStr.contains(str));
+  }
+
+  public void assertStdoutIsEmpty() {
+    stdout.flush();
+    final String stdoutStr = stdoutStream.toString();
+    TestCase.assertTrue("Stdout is '" + stdoutStr + "', but should be empty",
+        stdoutStr.isEmpty());
+  }
+
+  public void assertStdoutContains(final String str) {
+    stdout.flush();
+    final String stdoutStr = stdoutStream.toString();
+    TestCase.assertTrue("Stdout is '" + stdoutStr + "', but should contain '"
+        + str + "'", stdoutStr.contains(str));
   }
 
   /**

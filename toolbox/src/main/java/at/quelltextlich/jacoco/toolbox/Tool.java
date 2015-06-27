@@ -19,6 +19,7 @@ import org.kohsuke.args4j.OptionHandlerFilter;
 public abstract class Tool {
   private Environment environment;
   protected PrintStream stderr;
+  protected PrintStream stdout;
 
   @Option(name = "--help", aliases = { "-help", "-h", "-?" }, help = true, usage = "print this help screen")
   private boolean help;
@@ -36,6 +37,7 @@ public abstract class Tool {
   void setEnvironment(final Environment environment) {
     this.environment = environment;
     stderr = this.environment.getStderr();
+    stdout = this.environment.getStdout();
   }
 
   /**

@@ -18,9 +18,11 @@ import org.kohsuke.args4j.Option;
  * Tool that deals with exec inputs
  */
 public abstract class InputTool extends Tool {
+  private final boolean doLoad;
+
   protected ExecFileLoader loader = new ExecFileLoader();
 
-  private final List<File> inputs = new LinkedList<File>();
+  protected final List<File> inputs = new LinkedList<File>();
 
   @Option(name = "--input", usage = "Adds an input to the toolbox")
   void addInput(final String inputStr) {
@@ -34,6 +36,15 @@ public abstract class InputTool extends Tool {
     if (!inputs.add(input)) {
       exit("Could not add '" + input + "' to inputs");
     }
+  }
+
+  public InputTool() {
+    this(true);
+  }
+
+  public InputTool(final boolean doLoad) {
+    super();
+    this.doLoad = doLoad;
   }
 
   /**
@@ -53,6 +64,8 @@ public abstract class InputTool extends Tool {
   public void run(final String[] args) {
     super.run(args);
 
-    loadInputs();
+    if (doLoad) {
+      loadInputs();
+    }
   }
 }

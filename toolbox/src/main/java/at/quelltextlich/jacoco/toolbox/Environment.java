@@ -17,6 +17,13 @@ public interface Environment {
   public PrintStream getStderr();
 
   /**
+   * Gets the stdout for this environment
+   *
+   * @return stdout for this environment
+   */
+  public PrintStream getStdout();
+
+  /**
    * Exits the tool.
    *
    * @param exitCode
