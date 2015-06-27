@@ -86,6 +86,7 @@
                                     <excludes>
                                         <exclude>META-INF/MTNMINDS.SF</exclude>
                                         <exclude>META-INF/MTNMINDS.RSA</exclude>
+                                        <exclude>about.html</exclude>
                                     </excludes>
                                 </filter>
                             </filters>
