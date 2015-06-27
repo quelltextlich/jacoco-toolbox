@@ -9,7 +9,7 @@
     </parent>
 
     <name>Test Data Bar</name>
-    <description>Generator for exec files used in Jacoco Toolbox tests</description>
+    <description>Generator for exec files used in JaCoCo Toolbox tests</description>
 
     <artifactId>TestDataGroupBar</artifactId>
     <packaging>jar</packaging>

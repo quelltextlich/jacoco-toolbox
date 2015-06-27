@@ -11,7 +11,7 @@
     </parent>
 
     <name>Test Data Foo</name>
-    <description>Generator for exec files used in Jacoco Toolbox tests</description>
+    <description>Generator for exec files used in JaCoCo Toolbox tests</description>
 
     <artifactId>TestDataGroupFoo</artifactId>
     <packaging>jar</packaging>

@@ -9,7 +9,7 @@ package at.quelltextlich.jacoco.toolbox;
 import java.util.Arrays;
 
 /**
- * Toolbox for working with Jacoco exec files
+ * Toolbox for working with JaCoCo exec files
  */
 public class Toolbox extends Tool {
   ToolRegistry toolRegistry = new ToolRegistry();

@@ -10,8 +10,8 @@
         <version>0.4103.1-SNAPSHOT</version>
     </parent>
 
-    <name>Jacoco Toolbox</name>
-    <description>Tools to deal with Jacoco exec files</description>
+    <name>JaCoCo Toolbox</name>
+    <description>Tools to deal with JaCoCo exec files</description>
 
     <artifactId>jacoco-toolbox</artifactId>
     <packaging>jar</packaging>

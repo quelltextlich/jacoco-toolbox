@@ -9,7 +9,7 @@
     </parent>
 
     <name>Test Data Merged</name>
-    <description>Generator for exec files used in Jacoco Toolbox tests</description>
+    <description>Generator for exec files used in JaCoCo Toolbox tests</description>
 
     <artifactId>TestDataGroupMerged</artifactId>
     <packaging>jar</packaging>

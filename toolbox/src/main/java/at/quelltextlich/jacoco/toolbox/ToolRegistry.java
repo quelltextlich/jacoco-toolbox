@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 /**
- * Toolbox for working with Jacoco exec files
+ * Toolbox for working with JaCoCo exec files
  */
 public class ToolRegistry {
 
