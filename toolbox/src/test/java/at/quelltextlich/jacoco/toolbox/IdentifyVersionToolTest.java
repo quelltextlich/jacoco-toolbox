@@ -47,8 +47,8 @@ public class IdentifyVersionToolTest extends ToolTestCase {
   }
 
   public void testInputMerged4103() throws IOException {
-    final File input = new File(getClass().getResource("/jacoco-merged.exec")
-        .getPath());
+    final File input = new File(getClass().getResource(
+        "/jacoco-merged-4103.exec").getPath());
     final String[] args = new String[] { "--input", input.getAbsolutePath() };
 
     final ToolShim tool = new ToolShim(IdentifyVersionTool.class);
@@ -56,7 +56,7 @@ public class IdentifyVersionToolTest extends ToolTestCase {
 
     tool.assertExitStatus(0);
     tool.assertStderrIsEmpty();
-    tool.assertStdoutContains("jacoco-merged.exec,0x1007,4103");
+    tool.assertStdoutContains("jacoco-merged-4103.exec,0x1007,4103");
   }
 
   public void testInputMerged4102() throws IOException {
@@ -76,7 +76,7 @@ public class IdentifyVersionToolTest extends ToolTestCase {
     final File input4102 = new File(getClass().getResource(
         "/jacoco-merged-4102.exec").getPath());
     final File input4103 = new File(getClass().getResource(
-        "/jacoco-merged.exec").getPath());
+        "/jacoco-merged-4103.exec").getPath());
     final String[] args = new String[] { "--input",
         input4102.getAbsolutePath(), "--input", input4103.getAbsolutePath() };
 
@@ -86,6 +86,6 @@ public class IdentifyVersionToolTest extends ToolTestCase {
     tool.assertExitStatus(0);
     tool.assertStderrIsEmpty();
     tool.assertStdoutContains("jacoco-merged-4102.exec,0x1006,4102");
-    tool.assertStdoutContains("jacoco-merged.exec,0x1007,4103");
+    tool.assertStdoutContains("jacoco-merged-4103.exec,0x1007,4103");
   }
 }
