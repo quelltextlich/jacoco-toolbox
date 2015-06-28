@@ -88,5 +88,24 @@ public class InputToolTest extends ToolTestCase {
     tool.run(args);
 
     tool.assertExitStatus(0);
+    tool.assertStderrIsEmpty();
+    tool.assertStdoutIsEmpty();
+  }
+
+  public void testInputVerbose() throws IOException {
+    final File file = new File(getClass().getResource("/jacoco-bar.exec")
+        .getPath());
+    final String[] args = new String[] { "--input", file.getAbsolutePath(),
+    "--verbose" };
+
+    final ToolShim tool = new ToolShim(DummyInputTool.class);
+    tool.run(args);
+
+    tool.assertExitStatus(0);
+    tool.assertStderrIsEmpty();
+    tool.assertStdoutContains("JaCoCo Toolbox");
+    tool.assertStdoutContains("on");
+    tool.assertStdoutContains("Supported");
+    tool.assertStdoutContains("input");
   }
 }

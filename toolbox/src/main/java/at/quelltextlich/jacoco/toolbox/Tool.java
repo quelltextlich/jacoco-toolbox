@@ -7,6 +7,7 @@
 package at.quelltextlich.jacoco.toolbox;
 
 import java.io.PrintStream;
+import java.util.Arrays;
 
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -23,6 +24,9 @@ public abstract class Tool {
 
   @Option(name = "--help", aliases = { "-help", "-h", "-?" }, help = true, usage = "print this help screen")
   private boolean help;
+
+  @Option(name = "--verbose", usage = "Turn on verbose mode")
+  protected boolean verbose;
 
   public Tool() {
     setEnvironment(new SystemEnvironment());
@@ -112,5 +116,13 @@ public abstract class Tool {
    */
   public void run(final String[] args) {
     parseArgs(args);
+
+    if (verbose && !(this instanceof VersionTool)) {
+      final Tool versionTool = new VersionTool();
+      versionTool.setEnvironment(environment);
+      versionTool.run(new String[] {});
+      stdout.println("Running " + this.getClass() + " with arguments "
+          + Arrays.asList(args));
+    }
   }
 }
