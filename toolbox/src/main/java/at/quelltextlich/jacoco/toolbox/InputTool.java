@@ -26,18 +26,20 @@ public abstract class InputTool extends Tool {
 
   @Option(name = "--input", usage = "Adds an input to the toolbox. Multiple "
       + "inputs can be provided in one string by concatenating them using "
-      + "colons (':').")
+      + "colons (':'). Empty paths get discarded.")
   void addInput(final String inputStr) {
     for (final String singleInputStr : inputStr.split(":")) {
-      final File input = new File(singleInputStr);
-      if (!input.exists()) {
-        exit("The file '" + input + "' does not exist");
-      }
-      if (!input.canRead()) {
-        exit("The file '" + input + "' is not readable");
-      }
-      if (!inputs.add(input)) {
-        exit("Could not add '" + input + "' to inputs");
+      if (!singleInputStr.isEmpty()) {
+        final File input = new File(singleInputStr);
+        if (!input.exists()) {
+          exit("The file '" + input + "' does not exist");
+        }
+        if (!input.canRead()) {
+          exit("The file '" + input + "' is not readable");
+        }
+        if (!inputs.add(input)) {
+          exit("Could not add '" + input + "' to inputs");
+        }
       }
     }
   }

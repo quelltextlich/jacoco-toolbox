@@ -11,10 +11,10 @@ import java.io.IOException;
 
 public class MergeToolTest extends ToolTestCase {
   final public static String[] FOO_CSV_ALL_MISSING = new String[] {
-    ReportCsvToolTest.CSV_HEADER,
-    "Code Coverage Analysis,at.quelltextlich.jacoco.toolbox,Bar,9,0,0,0,5,0,4,0,4,0",
-    "Code Coverage Analysis,at.quelltextlich.jacoco.toolbox,Baz,4,0,0,0,2,0,2,0,2,0",
-  "Code Coverage Analysis,at.quelltextlich.jacoco.toolbox,Foo,9,0,0,0,5,0,4,0,4,0" };
+      ReportCsvToolTest.CSV_HEADER,
+      "Code Coverage Analysis,at.quelltextlich.jacoco.toolbox,Bar,9,0,0,0,5,0,4,0,4,0",
+      "Code Coverage Analysis,at.quelltextlich.jacoco.toolbox,Baz,4,0,0,0,2,0,2,0,2,0",
+      "Code Coverage Analysis,at.quelltextlich.jacoco.toolbox,Foo,9,0,0,0,5,0,4,0,4,0" };
 
   public void testNoArguments() {
     final ToolShim tool = new ToolShim(MergeTool.class);
