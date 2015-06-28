@@ -92,6 +92,34 @@ public class InputToolTest extends ToolTestCase {
     tool.assertStdoutIsEmpty();
   }
 
+  public void testInputFooBar() throws IOException {
+    final File fileFoo = new File(getClass().getResource("/jacoco-foo.exec")
+        .getPath());
+    final File fileBar = new File(getClass().getResource("/jacoco-bar.exec")
+        .getPath());
+    final String[] args = new String[] { "--input", fileFoo.getAbsolutePath(),
+        "--input", fileBar.getAbsolutePath() };
+
+    final ToolShim tool = new ToolShim(DummyInputTool.class);
+    tool.run(args);
+
+    tool.assertExitStatus(0);
+  }
+
+  public void testInputFooColonBar() throws IOException {
+    final File fileFoo = new File(getClass().getResource("/jacoco-foo.exec")
+        .getPath());
+    final File fileBar = new File(getClass().getResource("/jacoco-bar.exec")
+        .getPath());
+    final String[] args = new String[] { "--input",
+        fileFoo.getAbsolutePath() + ":" + fileBar.getAbsolutePath() };
+
+    final ToolShim tool = new ToolShim(DummyInputTool.class);
+    tool.run(args);
+
+    tool.assertExitStatus(0);
+  }
+
   public void testInputVerbose() throws IOException {
     final File file = new File(getClass().getResource("/jacoco-bar.exec")
         .getPath());

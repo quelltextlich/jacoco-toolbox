@@ -27,30 +27,39 @@ public abstract class ReportTool extends InputTool {
 
   private final List<File> analyzeFors = new LinkedList<File>();
 
-  @Option(name = "--analyze-for", usage = "Add a file to analyze for. This can be a plain class file, a jar file, or a directory.")
+  @Option(name = "--analyze-for", usage = "Add a file to analyze for. This "
+      + "can be a plain class file, a jar file, or a directory. Multiple "
+      + "paths can be provided in one string by concatenating them using "
+      + "colons (':').")
   void addAnalyze(final String analyzeFor) {
-    final File file = new File(analyzeFor);
-    if (!file.exists()) {
-      exit("The file '" + file + "' does not exist");
-    }
-    if (!analyzeFors.add(file)) {
-      exit("Could not add '" + file + "' to analyzes");
+    for (final String singleAnalyzeFor : analyzeFor.split(":")) {
+      final File file = new File(singleAnalyzeFor);
+      if (!file.exists()) {
+        exit("The file '" + file + "' does not exist");
+      }
+      if (!analyzeFors.add(file)) {
+        exit("Could not add '" + file + "' to analyzes");
+      }
     }
   }
 
   private final List<File> sources = new LinkedList<File>();
 
-  @Option(name = "--source", usage = "Add a directory to search sources in.")
+  @Option(name = "--source", usage = "Add a directory to search sources in. "
+      + "Multiple paths can be provided in one string by concatenating them "
+      + "using colons (':').")
   void addSource(final String source) {
-    final File file = new File(source);
-    if (!file.exists()) {
-      exit("The file '" + file + "' does not exist");
-    }
-    if (!file.isDirectory()) {
-      exit("The file '" + file + "' is not a directory");
-    }
-    if (!sources.add(file)) {
-      exit("Could not add '" + file + "' to sources");
+    for (final String singleSource : source.split(":")) {
+      final File file = new File(singleSource);
+      if (!file.exists()) {
+        exit("The file '" + file + "' does not exist");
+      }
+      if (!file.isDirectory()) {
+        exit("The file '" + file + "' is not a directory");
+      }
+      if (!sources.add(file)) {
+        exit("Could not add '" + file + "' to sources");
+      }
     }
   }
 
