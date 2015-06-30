@@ -15,9 +15,6 @@
 
     <modules>
         <module>toolbox</module>
-        <module>test-data-foo</module>
-        <module>test-data-bar</module>
-        <module>test-data-merged</module>
     </modules>
 
     <properties>
@@ -34,6 +31,7 @@
         <plugin.gpg.version>1.6</plugin.gpg.version>
         <plugin.release.version>2.5</plugin.release.version>
         <plugin.deploy.version>2.8.2</plugin.deploy.version>
+        <plugin.enforcer.version>1.4</plugin.enforcer.version>
 
         <jacoco.version>0.7.2.201409121644</jacoco.version>
     </properties>
@@ -182,9 +180,29 @@
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <useReleaseProfile>false</useReleaseProfile>
-                    <releaseProfiles>release</releaseProfiles>
                     <goals>deploy</goals>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
+                    <!-- The following is an ugly hack. Basically, we want
+                    to force activation of the 'test-data-modules' profile
+                    when releasing. Using <releaseProfiles> doesn't work, as
+                    it's only for release:perform.
+                    <arguments>-Prelease,test-data-modules</arguments>
+                    doesn't work either, as the updating of pom would still
+                    not pull in the test-data modules when transforming
+                    poms. Only when doing the test build, test-data modules
+                    would get pulled in. But now they'd still reference the
+                    old pom, and we get a misleading errer about it.
+
+                    To overcome this issue, we only active the release
+                    profile, and in the release profile we enforce that the
+                    test-data-modules profile is active.
+
+                    Thereby, we at least get a descriptive error message
+                    when we forget to activate the test-data-modules profile
+                    upon releasing.
+                    -->
+                    <releaseProfiles>release</releaseProfiles>
+                    <arguments>-Prelease</arguments>
                 </configuration>
             </plugin>
         </plugins>
@@ -193,6 +211,41 @@
     <profiles>
         <profile>
             <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <inherited>false</inherited>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>${plugin.enforcer.version}</version>
+                        <executions>
+                            <execution>
+                                <id>enforce-all-profiles-are-activated</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireActiveProfile>
+                                            <profiles>test-data-modules</profiles>
+                                            <message>'test-data-modules' profile is not active. Please re-prepare the release after adding '-Prelease,test-data-modules' to the arguments</message>
+                                        </requireActiveProfile>
+                                    </rules>
+                                    <fail>true</fail>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>test-data-modules</id>
+            <modules>
+                <module>test-data-foo</module>
+                <module>test-data-bar</module>
+                <module>test-data-merged</module>
+            </modules>
         </profile>
     </profiles>
 </project>
