@@ -12,6 +12,10 @@ Using this JaCoCo toolbox, JaCoCo exec files can get:
 * turned inte [HTML reports](#generating-a-csv-report)
 from the command-line.
 
+####Table of Contents
+1. [Prerequisites](#prerequisites)
+2. [Quickstart demo](#quickstart-demo)
+
 
 
 Prerequisites
