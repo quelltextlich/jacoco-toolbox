@@ -171,6 +171,11 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${plugin.deploy.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
