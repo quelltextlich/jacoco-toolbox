@@ -47,6 +47,7 @@
     <scm>
         <connection>scm:git:git://git.quelltextlich.at/jacoco/jacoco-toolbox</connection>
         <developerConnection>scm:git:file:///home/christian/sources/quelltextlich/jacoco-toolbox</developerConnection>
+        <url>https://github.com/quelltextlich/jacoco-toolbox</url>
         <tag>HEAD</tag>
     </scm>
 
