@@ -38,23 +38,10 @@ public class VersionTool extends Tool {
     stdout.print(" ");
     stdout.println(getProperty("application.version"));
 
-    final String timestamp = getProperty("build.timestamp");
-    String formattedTimestamp;
-    if (timestamp == null || "${timestamp}".equals(timestamp)) {
-      formattedTimestamp = "?";
-    } else {
-      final SimpleDateFormat format = new SimpleDateFormat(
-          "yyyy-MM-dd'T'HH:mm:ssZ", Locale.US);
-      format.setTimeZone(TimeZone.getTimeZone("UTC"));
-      formattedTimestamp = format.format(new Date(Long.parseLong(timestamp)));
-    }
-    stdout.print("Built on ");
-    stdout.print(formattedTimestamp);
-    stdout.print(" using commit ");
-    stdout.print(getProperty("git.hash").substring(0, 7));
-    stdout.print(" (branch: ");
-    stdout.print(getProperty("git.branch"));
-    stdout.println(")");
+    stdout.print("Built from commit ");
+    stdout.print(getProperty("git.description"));
+    stdout.print(" on ");
+    stdout.println(getProperty("build.time"));
 
     stdout.print("Supported exec format versions: ");
     stdout.print(Integer.toString(ExecutionDataWriter.FORMAT_VERSION));
