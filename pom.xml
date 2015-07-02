@@ -1,7 +1,4 @@
-<project
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <name>JaCoCo Toolbox Parent</name>
@@ -10,7 +7,7 @@
 
     <groupId>at.quelltextlich.jacoco</groupId>
     <artifactId>jacoco-toolbox-parent</artifactId>
-    <version>0.4103.1-SNAPSHOT</version>
+    <version>0.4103.1</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -48,7 +45,7 @@
         <connection>scm:git:git://git.quelltextlich.at/jacoco/jacoco-toolbox</connection>
         <developerConnection>scm:git:file:///home/christian/sources/quelltextlich/jacoco-toolbox</developerConnection>
         <url>https://github.com/quelltextlich/jacoco-toolbox</url>
-        <tag>HEAD</tag>
+        <tag>v0.4103.1</tag>
     </scm>
 
     <developers>
