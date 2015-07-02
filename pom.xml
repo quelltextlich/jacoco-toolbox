@@ -7,7 +7,7 @@
 
     <groupId>at.quelltextlich.jacoco</groupId>
     <artifactId>jacoco-toolbox-parent</artifactId>
-    <version>0.4103.1</version>
+    <version>0.4103.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -45,7 +45,7 @@
         <connection>scm:git:git://git.quelltextlich.at/jacoco/jacoco-toolbox</connection>
         <developerConnection>scm:git:file:///home/christian/sources/quelltextlich/jacoco-toolbox</developerConnection>
         <url>https://github.com/quelltextlich/jacoco-toolbox</url>
-        <tag>v0.4103.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <developers>

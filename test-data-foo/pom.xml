@@ -4,7 +4,7 @@
     <parent>
         <groupId>at.quelltextlich.jacoco</groupId>
         <artifactId>jacoco-toolbox-parent</artifactId>
-        <version>0.4103.1</version>
+        <version>0.4103.2-SNAPSHOT</version>
     </parent>
 
     <name>Test Data Foo</name>
