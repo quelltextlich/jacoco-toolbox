@@ -145,6 +145,9 @@ You can now move on to the [demo section](#more-demos) to see how to merge
 FAQ
 ---
 
+1. [Why those ridiculously high version numbers like `4102`, or `4103`?](#why-those-ridiculously-high-version-numbers-like-4102-or-4103)
+2. [What's the `Incompatible version 1006` (or `[...] 1007`) error?](#whats-the-incompatible-version-1006-or--1007-error)
+
 #### Why those ridiculously high version numbers like `4102`, or `4103`?
 
 JaCoCo's own exec files store a version number in them. And JaCoCo itself
