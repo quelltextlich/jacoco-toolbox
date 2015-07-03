@@ -10,7 +10,8 @@ Using this JaCoCo toolbox, JaCoCo exec files can get:
 * turned into [CSV reports](#generating-a-csv-report),
 * turned into [XML reports](#generating-a-xml-report), and
 * turned inte [HTML reports](#generating-a-html-report)
-from the command-line.
+
+right from the command-line. No Java coding needed.
 
 ####Table of Contents
 1. [Quickstart](#quickstart)
